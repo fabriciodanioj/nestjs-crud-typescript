@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 
@@ -23,6 +23,10 @@ export class AuthService {
       };
     }
 
-    return user;
+    if (!user) {
+      throw new HttpException('NotFoundException', HttpStatus.NOT_FOUND);
+    } else {
+      throw new HttpException('UnauthorizedException', HttpStatus.UNAUTHORIZED);
+    }
   }
 }

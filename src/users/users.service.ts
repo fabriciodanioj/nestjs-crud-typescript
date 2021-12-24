@@ -16,7 +16,21 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = await this.usersModel.create(createUserDto);
+    const usersCount = await this.usersModel.countDocuments();
+
+    let user: User;
+
+    if (usersCount === 0) {
+      user = await this.usersModel.create({
+        name: 'Admin',
+        email: 'admin@gmail.com',
+        password: '123456',
+        role: 'admin',
+      });
+    } else {
+      user = await this.usersModel.create(createUserDto);
+    }
+
     return user;
   }
 
